@@ -1,12 +1,11 @@
-FROM openjdk:17-jdk-slim
+FROM maven:3.9-ibm-semeru-17-focal AS build
+COPY . .
+RUN mvn clean package -DskipTests
 LABEL authors="jkaru"
+
+FROM ibm-semeru-runtimes:open-17-jre-focal
+COPY --from=build /target/*.jar product-service.jar
 
 EXPOSE 8060
 
-# Set working directory
-WORKDIR /app
-
-COPY target/*.jar /app/product-service.jar
-
-
-ENTRYPOINT ["java", "-jar", "/app/product-service.jar"]
+ENTRYPOINT ["java", "-jar", "product-service.jar"]
