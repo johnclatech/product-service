@@ -1,4 +1,12 @@
-FROM openjdk:21-ea-2-jdk-slim
-LABEL authors="Gaming 15"
+FROM openjdk:17-jdk-slim
+LABEL authors="jkaru"
 
-ENTRYPOINT ["top", "-b"]
+EXPOSE 8060
+
+# Set working directory
+WORKDIR /app
+
+COPY target/*.jar /app/product-service.jar
+
+
+ENTRYPOINT ["java", "-jar", "/app/product-service.jar"]
